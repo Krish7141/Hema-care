@@ -23,7 +23,10 @@
 </head>
 
 <body style="color:black">
- 
+  <?php
+  include 'conn.php';
+    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+    ?>
 <div id="header">
 <?php $active="add"; include 'header.php';
 ?>
@@ -78,8 +81,14 @@
       <div class="font-italic">Blood Group<span style="color:red">*</span></div>
       <div><select name="blood" class="form-control" required>
       <option value=""selected disabled>Select</option>
-     
-       
+      <?php
+        include 'conn.php';
+        $sql= "select * from blood";
+        $result=mysqli_query($conn,$sql) or die("query unsuccessful.");
+      while($row=mysqli_fetch_assoc($result)){
+       ?>
+       <option value=" <?php echo $row['blood_id'] ?>"> <?php echo $row['blood_group'] ?> </option>
+     <?php } ?>
       </select>
       </div>
       </div>
@@ -101,7 +110,10 @@
       </div>
       </div>
       </div>
-     
+      <?php
+    } else {
+        echo '<div class="alert alert-danger"><b> Please Login First To Access Admin Portal.</b></div>';
+        ?>
         <form method="post" name="" action="login.php" class="form-horizontal">
           <div class="form-group">
             <div class="col-sm-8 col-sm-offset-4" style="float:left">
@@ -110,7 +122,8 @@
             </div>
           </div>
         </form>
-  
+    <?php }
+     ?>
      <script>
      function popup() {
        alert("Data added Successfully.");
