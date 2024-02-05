@@ -57,7 +57,11 @@
 
 <body style="color:black">
 
-  
+  <?php
+  include 'conn.php';
+    include 'session.php';
+    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+    ?>
 
 <div id="header">
 <?php include 'header.php';
@@ -89,7 +93,37 @@ include 'sidebar.php'; ?>
 
                 <div class="form-group">
                   <label class="col-sm-4 control-label">Selected Page : </label>
-                   
+                    <?php
+                    include 'conn.php';
+              switch($_GET['type'])
+              {
+                    case "aboutus" :
+                          echo "About US";
+                          break;
+                    case "donor" :
+                          echo "Why Donate Blood";
+                          break;
+                    case "needforblood" :
+                          echo "The Need For Blood";
+                          break;
+                    case "needforblood" :
+                          echo "The Need For Blood";
+                          break;
+                    case "bloodtips" :
+                          echo "Blood Tips";
+                          break;
+                    case "whoyouhelp" :
+                          echo "Why you could Help";
+                          break;
+                    case "bloodgroups" :
+                          echo "Blood Groups";
+                          break;
+                    case "universal" :
+                          echo "Universal Donors And Recepients";
+                          break;
+              }
+
+              ?>
                 </div>
                 <div class="form-group">
                       <label class="col-sm-4 control-label">Page Details: </label>
@@ -120,12 +154,25 @@ include 'sidebar.php'; ?>
 
 
 
-    
+    <?php if(isset($_POST['submit']))
+    {
+      $type=$_GET['type'];
+      $data=$_POST['data'];
+      $conn=mysqli_connect("localhost","root","","blood_donation") or die("Connection error");
+      $sql= "update pages set page_data='{$data}'where page_type='{$type}'";
+      $result=mysqli_query($conn,$sql) or die("query unsuccessful.");
+    echo '<div class="alert alert-success"><b>Page Data Updated Successfully.</b></div>';
+    }
+
+    ?>
 
             </div>
           </div>
         </div>
-  
+  <?php
+ } else {
+     echo '<div class="alert alert-danger"><b> Please Login First To Access Admin Portal.</b></div>';
+     ?>
      <form method="post" name="" action="login.php" class="form-horizontal">
        <div class="form-group">
          <div class="col-sm-8 col-sm-offset-4" style="float:left">
@@ -134,7 +181,8 @@ include 'sidebar.php'; ?>
          </div>
        </div>
      </form>
- 
+ <?php }
+  ?>
 
 </body>
 </html>
