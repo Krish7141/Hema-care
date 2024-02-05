@@ -35,7 +35,11 @@
 </style>
 
 </head>
-
+<?php
+include 'conn.php';
+  include 'session.php';
+  if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+  ?>
 <body style="color:black">
 <div id="header" >
 <?php include 'header.php';
@@ -58,7 +62,20 @@
 
       </div>
       <hr>
-      
+      <?php
+      $limit = 3;
+      if(isset($_GET['page'])){
+        $page = $_GET['page'];
+      }else{
+        $page = 1;
+      }
+      $offset = ($page - 1) * $limit;
+      $count=$offset+1;
+        $sql= "select * from pages LIMIT {$offset},{$limit} ";
+        $result=mysqli_query($conn,$sql);
+        if(mysqli_num_rows($result)>0)   {
+       ?>
+
        <div class="table-responsive">
       <table class="table table-bordered" style="text-align:center">
           <thead style="text-align:center">
@@ -71,19 +88,59 @@
           <tbody>
             <?php
             while($row = mysqli_fetch_assoc($result)) { ?>
-          
+          <tr>
+                  <td ><?php echo  $count++; ?></td>
+                  <td ><?php echo $row['page_name']; ?></td>
+                  <td ><?php echo $row['page_type']; ?></td>
+                  <td id="example" style="text-align:left"><div style="width:100%; max-height:110px; overflow:auto"><?php echo $row['page_data']; ?></div></td>
+                    <td id="he" style="width:100px;">
+                    <a style="background-color:aqua" href='update_page_details.php?type=<?php echo $row['page_type'];?>'> <span class="glyphicon glyphicon-edit"></span></a>
+                </td>
+              </tr>
+            <?php } ?>
           </tbody>
       </table>
     </div>
-    
+    <?php } ?>
 
     <div class="table-responsive"style="text-align:center;align:center">
-        
+        <?php
+        $sql1 = "SELECT * FROM pages";
+        $result1 = mysqli_query($conn, $sql1) or die("Query Failed.");
+
+        if(mysqli_num_rows($result1) > 0){
+
+          $total_records = mysqli_num_rows($result1);
+
+          $total_page = ceil($total_records / $limit);
+
+          echo '<ul class="pagination admin-pagination">';
+          if($page > 1){
+            echo '<li><a href="pages.php?page='.($page - 1).'">Prev</a></li>';
+          }
+          for($i = 1; $i <= $total_page; $i++){
+            if($i == $page){
+              $active = "active";
+            }else{
+              $active = "";
+            }
+            echo '<li class="'.$active.'"><a href="pages.php?page='.$i.'">'.$i.'</a></li>';
+          }
+          if($total_page > $page){
+            echo '<li><a href="pages.php?page='.($page + 1).'">Next</a></li>';
+          }
+
+          echo '</ul>';
+        }
+        ?>
       </div>
   </div>
   </div>
 </div>
-
+<?php }
+   else {
+       echo '<div class="alert alert-danger"><b> Please Login First To Access Admin Portal.</b></div>';
+       ?>
        <form method="post" name="" action="login.php" class="form-horizontal">
          <div class="form-group">
            <div class="col-sm-8 col-sm-offset-4" style="float:left">
@@ -92,6 +149,8 @@
            </div>
          </div>
        </form>
-   
+   <?php }
+
+    ?>
 </body>
 </html>
