@@ -22,7 +22,10 @@
 }
 </style>
 </head>
-
+<?php
+include 'conn.php';
+  if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+  ?>
 <body style="color:black">
 <div id="header">
 <?php include 'header.php';
@@ -91,6 +94,51 @@ include 'sidebar.php'; ?>
             </div>
             </div>
 
+<?php
+
+
+if(isset($_POST["submit"])){
+  $username=$_SESSION['username'];
+  $password=mysqli_real_escape_string($conn,$_POST["currpassword"]);
+  $sql="select * from admin_info where admin_username='$username'";
+  $result=mysqli_query($conn,$sql) or die("query failed.");
+  if(mysqli_num_rows($result)>0)
+  {
+    while($row=mysqli_fetch_assoc($result)){
+      if($password==$row['admin_password']){
+
+    $newpassword=mysqli_real_escape_string($conn,$_POST["newpassword"]);
+    $confpassword=mysqli_real_escape_string($conn,$_POST["confirmpassword"]);
+
+    if($newpassword==$confpassword)
+    {
+      if($newpassword!=$password)
+      {
+      $sql1="UPDATE admin_info set admin_password='{$newpassword}' where admin_username='{$username}'";
+      $result1=mysqli_query($conn,$sql1) or die("query failed.");
+      echo '<div class="alert alert-success alert_dismissible"><button type="button" class="close" data-dismiss="alert">&times;</button><b> Password Changed Successfully.</b></div>';
+      }
+      else {
+          echo  '<div class="alert alert-info alert_dismissible"><button type="button" class="close" data-dismiss="alert">&times;</button><b>New Password Can not be same as Current Password..</b></div>';
+          }
+      }
+
+      else {
+        echo '<div class="alert alert-warning alert_dismissible"><button type="button" class="close" data-dismiss="alert">&times;</button> <b>New Password and Confirm Password Not Matched!</b></div>';
+      }
+    }
+  else {
+    echo '<div class="alert alert-danger alert_dismissible"><button type="button" class="close" data-dismiss="alert">&times;</button><b> Current Password not matched!</b></div>';
+  }
+}
+}
+}
+?>
+<?php
+}
+else {
+    echo '<div class="alert alert-danger"><b> Please Login First To Access Admin Portal.</b></div>';
+    ?>
     <form method="post" name="" action="login.php" class="form-horizontal">
       <div class="form-group">
         <div class="col-sm-8 col-sm-offset-4" style="float:left">
@@ -99,7 +147,8 @@ include 'sidebar.php'; ?>
         </div>
       </div>
     </form>
-
+<?php }
+ ?>
 </div>
 </div>
 </div>
