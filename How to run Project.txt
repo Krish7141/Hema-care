@@ -1,0 +1,7 @@
+Copy this folder to htdocs
+
+Create database  blood_donation  // In phpmyadmin
+import datebase to phpmyadmin  from hemacare/sql/blood_donation
+
+http://localhost/hemacare/home.php   //WebSIte
+http://localhost/hemacare/admin/login.php  //admin Panel

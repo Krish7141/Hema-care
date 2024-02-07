@@ -30,7 +30,6 @@
   }
 </style>
 </head>
-
 <?php
 include 'conn.php';
   include 'session.php';
@@ -40,8 +39,6 @@ include 'conn.php';
 <div id="header">
 <?php include 'header.php';
 ?>
-
-
 </div>
 <div id="sidebar">
 <?php $active="list"; include 'sidebar.php'; ?>
@@ -59,7 +56,6 @@ include 'conn.php';
 
       </div>
       <hr>
-
       <?php
         include 'conn.php';
 
@@ -76,7 +72,6 @@ include 'conn.php';
         if(mysqli_num_rows($result)>0)   {
        ?>
 
-
        <div class="table-responsive">
       <table class="table table-bordered" style="text-align:center">
           <thead style="text-align:center">
@@ -91,7 +86,6 @@ include 'conn.php';
           <th style="text-align:center">Action</th>
           </thead>
           <tbody>
-
             <?php
             while($row = mysqli_fetch_assoc($result)) { ?>
           <tr>
@@ -113,19 +107,11 @@ include 'conn.php';
     </div>
     <?php } ?>
 
-           
-         
-          </tbody>
-      </table>
-    </div>
-  
-
 
 
 
 
 <div class="table-responsive"style="text-align:center;align:center">
-
     <?php
     $sql1 = "SELECT * FROM donor_details";
     $result1 = mysqli_query($conn, $sql1) or die("Query Failed.");
@@ -163,7 +149,6 @@ include 'conn.php';
    else {
        echo '<div class="alert alert-danger"><b> Please Login First To Access Admin Portal.</b></div>';
        ?>
-
        <form method="post" name="" action="login.php" class="form-horizontal">
          <div class="form-group">
            <div class="col-sm-8 col-sm-offset-4" style="float:left">
@@ -172,10 +157,8 @@ include 'conn.php';
            </div>
          </div>
        </form>
-
    <?php }
 
     ?>
-
 </body>
 </html>
